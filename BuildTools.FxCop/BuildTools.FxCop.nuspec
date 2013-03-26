@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>BuildTools.FxCop</id>
+    <version>1.0.0</version>
+    <title>BuildTools.FxCop</title>
+    <authors>Jon Wagner</authors>
+    <description>
+	Automatically Installs FxCop build targets and settings into a project so you have reasonable defaults.
+	Requires Visual Studio with Code Analysis or FxCop 10 (available from your Windows SDK).
+    </description>
+    <language>en-US</language>
+    <projectUrl>http://github.com/jonwagner/BuildTools</projectUrl>
+    <licenseUrl>http://opensource.org/licenses/ms-pl.html</licenseUrl>
+    <tags>Build BuildTools StyleCop</tags>
+  </metadata>
+  <files>
+    <file src="content\**\*.*" target="content" />
+    <file src="tools\**\*.*" target="tools" />
+    <file src="..\BuildTools.MsBuild\BuildTools.MsBuild.psm1" target="tools" />
+  </files>
+</package>

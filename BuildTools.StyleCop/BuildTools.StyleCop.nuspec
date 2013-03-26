@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>BuildTools.StyleCop</id>
+    <version>4.7.0</version>
+    <title>BuildTools.StyleCop</title>
+    <authors>Jon Wagner</authors>
+    <description>
+	Automatically Installs StyleCop build targets into a project so you don't have to manually install StyleCop.
+    StyleCop binaries are released under MS-PL by http://stylecop.codeplex.com/license.
+    BuildTools.StyleCop scripts are released under MS-PL by http://github.com/jonwagner/BuildTools
+    </description>
+    <language>en-US</language>
+    <projectUrl>http://github.com/jonwagner/BuildTools</projectUrl>
+    <licenseUrl>http://opensource.org/licenses/ms-pl.html</licenseUrl>
+    <tags>Build BuildTools StyleCop</tags>
+  </metadata>
+  <files>
+    <file src="content\**\*.*" target="content" />
+    <file src="tools\**\*.*" target="tools" />
+    <file src="..\BuildTools.MsBuild\BuildTools.MsBuild.psm1" target="tools" />
+  </files>
+</package>

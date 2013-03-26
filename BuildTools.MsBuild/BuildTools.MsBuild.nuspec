@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>BuildTools.MsBuild</id>
+    <version>1.0.0</version>
+    <title>BuildTools.MsBuild</title>
+    <authors>Jon Wagner</authors>
+    <description>
+	A PowerShell module to easily edit MsBuild project files.
+    </description>
+    <language>en-US</language>
+    <projectUrl>http://github.com/jonwagner/BuildTools</projectUrl>
+    <licenseUrl>http://opensource.org/licenses/ms-pl.html</licenseUrl>
+    <tags>Build BuildTools StyleCop</tags>
+  </metadata>
+  <files>
+    <file src="BuildTools.MsBuild.psm1" target="tools" />
+    <file src="init.ps1" target="tools" />
+  </files>
+</package>
