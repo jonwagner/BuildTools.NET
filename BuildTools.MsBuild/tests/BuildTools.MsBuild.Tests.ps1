@@ -162,6 +162,19 @@ TestScope "BuildTools.MsBuild" {
         }
     }
 
+    Describing "Remove-MsBuildProperty" {
+        Given "a standard project" {
+            $tempProject = New-TestProject
+
+            It "removes a global property" {
+                Set-MsBuildProperty -Project $tempProject -Name Foo -Value Bar
+                Get-MsBuildProperty -Project $tempProject -Name Foo | Should Count 1
+                Remove-MsBuildProperty -Project $tempProject -Name Foo
+                Get-MsBuildProperty -Project $tempProject -Name Foo | Should Count 0
+            }
+        }
+    }
+
     Describing "Get-MsBuildConfiguration" {
         Given "a standard project" {
             $tempProject = New-TestProject

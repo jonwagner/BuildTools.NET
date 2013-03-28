@@ -271,6 +271,43 @@ function Set-MsBuildProperty {
 
 <#
 .Synopsis
+    Removes A the build properties that tied to configuration.
+.Description
+    Removes A the build properties that tied to configuration. This does not return global properties.
+.Parameter Project
+    The project to modify.
+.Parameter Name
+    The name of the property to remove
+.Parameter Configuration
+    Filters the results by the name of the configuration (e.g. Debug or Release)
+.Parameter Platform
+    Filters the results by the name of the platform (e.g. AnyCPU or x86)
+.Example
+    Remove-MsBuildConfigurationProperty $Project -Name DebugType
+
+    Removes the DebugType property from all configurations.
+.Example
+    Remove-MsBuildConfigurationProperty $Project -Name DebugType -Configuration Release
+
+    Removes the DebugType property from the Release configuration.
+#>function Remove-MsBuildProperty {
+    param (
+        $Project,
+        [Parameter(Mandatory=$true)]
+        [string] $Name
+    )
+
+    # make sure we always have an msbuild project
+    $Project = Get-MsBuildProject -Project $Project
+
+    # remove it from all of the matching configurations
+    Get-MsBuildProperty -Project $Project -Name $Name |% {
+        $_.Parent.RemoveChild($_) | Out-Null
+    }
+}
+
+<#
+.Synopsis
     Gets all of the MSBuild configurations in a project.
 .Description
     Gets all of the MSBuild configurations in a project. This looks for Property Groups with the Condition
@@ -435,9 +472,8 @@ function Set-MsBuildConfigurationProperty {
 
     # remove it from all of the matching configurations
     Get-MsBuildConfiguration -Project $Project -Configuration $Configuration -Platform $Platform |% {
-        $propertyGroup = $_
-        $propertyGroup.Properties |? Name -eq $Name |% { 
-            $propertyGroup.RemoveChild($_) | Out-Null
+        $_.Properties |? Name -eq $Name |% { 
+            $_.Parent.RemoveChild($_) | Out-Null
         }
     }
 }
@@ -458,7 +494,7 @@ function Set-MsBuildConfigurationProperty {
 
     Enables the CODE_ANALYSIS constant for Release configurations.
 #>
-function Enable-CodeAnalysisConstant{
+function Enable-CodeAnalysisConstant {
     param (
         $Project,
         [string] $Configuration,
@@ -515,6 +551,6 @@ function Disable-CodeAnalysisConstant {
 
 Export-ModuleMember Add-MsBuildImport, Remove-MsBuildImport,
     Get-MsBuildProject, Get-MsBuildConfiguration, 
-    Get-MsBuildProperty, Set-MsBuildProperty,
+    Get-MsBuildProperty, Set-MsBuildProperty, Remove-MsBuildProperty,
     Get-MsBuildConfigurationProperty, Set-MsBuildConfigurationProperty, Remove-MsBuildConfigurationProperty,
     Enable-CodeAnalysisConstant, Disable-CodeAnalysisConstant
