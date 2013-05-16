@@ -140,7 +140,7 @@ TestScope "BuildTools.FxCop" {
             Enable-FxCop $tempProject -Quiet
             Get-MsBuildConfigurationProperty $tempProject -Name RunCodeAnalysis |% Value | Should Count 2 And | Should Be 'true','true'
 
-            It "can disnable FxCop globally" {
+            It "can disable FxCop globally" {
                 Disable-FxCop $tempProject -Quiet
                 Get-MsBuildConfigurationProperty $tempProject -Name RunCodeAnalysis |% Value | Should Count 2 And | Should Be 'false','false'
             }

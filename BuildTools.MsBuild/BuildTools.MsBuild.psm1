@@ -200,9 +200,9 @@ function Remove-PackageRestoreErrorForTarget {
 
 <#
 .Synopsis
-    Gets all of the build properties that are not tied to configurations.
+    Gets all of the global build properties that are not tied to configurations.
 .Description
-    Gets all of the build properties that are not tied to configurations. This returns global properties only.
+    Gets all of the global build properties that are not tied to configurations. This returns global properties only.
 .Parameter Project
     The project to analyze.
 .Parameter Name
@@ -225,7 +225,7 @@ function Get-MsBuildProperty {
     # make sure we always have an msbuild project
     $Project = Get-MsBuildProject -Project $Project
 
-    $props = $Project.Xml.PropertyGroups |? Condition -eq '' | Select-Object -First 1 |% Properties
+    $props = $Project.Xml.PropertyGroups |? Condition -eq '' |% Properties
     if ($Name) {
         return $props |? Name -eq $Name
     }
@@ -236,17 +236,21 @@ function Get-MsBuildProperty {
 
 <#
 .Synopsis
-    Gets all of the build properties that are not tied to configurations.
+    Sets a global build properties that not tied to any configuration.
 .Description
-    Gets all of the build properties that are not tied to configurations. This returns global properties only.
+    Sets a global build properties that not tied to any configuration.
+    By default, the property is only set in the first global PropertyGroup that is found.
+    Use the -All switch to set the property in all of the global PropertyGroups.
+
 .Parameter Project
     The project to analyze.
-.Parameter Name
-    The name of the property to filter on.
 .Parameter Name
     The name of the property to set.
 .Parameter Value
     The value of the property to set.
+.Parameter All
+    By default, the property is only set in the first global PropertyGroup that is found.
+    Use the -All switch to set the property in all of the global PropertyGroups.
 .Example
     Set-MsBuildProperty $Project -Name TargetFrameworkVersion -Value v4.5
 
@@ -258,39 +262,37 @@ function Set-MsBuildProperty {
         [Parameter(Mandatory=$true)]
         [string] $Name,
         [Parameter(Mandatory=$true)]
-        [string] $Value
+        [string] $Value,
+        [switch] $All
     )
 
     # make sure we always have an msbuild project
     $Project = Get-MsBuildProject -Project $Project
 
-    $Project.Xml.PropertyGroups |? Condition -eq '' | Select-Object -First 1 |% {
+    $groups = $Project.Xml.PropertyGroups |? Condition -eq ''
+
+    if (! $all) { $groups = $groups | Select-Object -First 1 }
+
+    $groups |% {
         $_.SetProperty($Name, $Value) | Out-Null
     }
 }
 
 <#
 .Synopsis
-    Removes A the build properties that tied to configuration.
+    Removes A the global build properties that are not tied to configuration.
 .Description
-    Removes A the build properties that tied to configuration. This does not return global properties.
+    Removes A the global build properties that are not tied to configuration. This removes global properties only.
 .Parameter Project
     The project to modify.
 .Parameter Name
     The name of the property to remove
-.Parameter Configuration
-    Filters the results by the name of the configuration (e.g. Debug or Release)
-.Parameter Platform
-    Filters the results by the name of the platform (e.g. AnyCPU or x86)
-.Example
-    Remove-MsBuildConfigurationProperty $Project -Name DebugType
+Example
+    Remove-MsBuildProperty $Project -Name DebugType
 
     Removes the DebugType property from all configurations.
-.Example
-    Remove-MsBuildConfigurationProperty $Project -Name DebugType -Configuration Release
-
-    Removes the DebugType property from the Release configuration.
-#>function Remove-MsBuildProperty {
+#>
+function Remove-MsBuildProperty {
     param (
         $Project,
         [Parameter(Mandatory=$true)]

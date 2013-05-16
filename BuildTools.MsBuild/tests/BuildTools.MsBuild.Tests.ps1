@@ -147,6 +147,16 @@ TestScope "BuildTools.MsBuild" {
                 $prop.Value | Should Be 'v4.5'
             }
         }
+
+        Given "a duplicate property" {
+            $tempProject = New-TestProject
+
+            It "gets both properties" {
+                $prop = Get-MsBuildProperty -Project $tempProject -Name DoubleProperty
+                $prop | Should Count 2
+                $prop.Value | Should Be (1, 2)
+            }
+        }
     }
 
     Describing "Set-MsBuildProperty" {
@@ -158,6 +168,30 @@ TestScope "BuildTools.MsBuild" {
                 $prop = Get-MsBuildProperty -Project $tempProject -Name Foo
                 $prop | Should Count 1
                 $prop.Value | Should Be 'Bar'
+            }
+        }
+
+        Given "a duplicate property" {
+            $tempProject = New-TestProject
+
+            It "sets the first property" {
+                $prop = Get-MsBuildProperty -Project $tempProject -Name DoubleProperty
+                $prop | Should Count 2
+                $prop.Value | Should Be (1, 2)
+                Set-MsBuildProperty -Project $tempProject -Name DoubleProperty -Value 3
+                $prop = Get-MsBuildProperty -Project $tempProject -Name DoubleProperty
+                $prop | Should Count 2
+                $prop.Value | Should Be (3, 2)
+            }
+
+            It "sets all properties with -All" {
+                $prop = Get-MsBuildProperty -Project $tempProject -Name DoubleProperty
+                $prop | Should Count 2
+                $prop.Value | Should Be (1, 2)
+                Set-MsBuildProperty -Project $tempProject -Name DoubleProperty -Value 3 -All
+                $prop = Get-MsBuildProperty -Project $tempProject -Name DoubleProperty
+                $prop | Should Count 2
+                $prop.Value | Should Be (3, 3)
             }
         }
     }

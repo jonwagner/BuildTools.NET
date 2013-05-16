@@ -13,6 +13,11 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <DoubleProperty>1</DoubleProperty>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- We have two global property groups to test the behavior of Get-MsBuildProperty -->
+    <DoubleProperty>2</DoubleProperty>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
