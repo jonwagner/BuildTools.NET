@@ -30,7 +30,7 @@ Follow [@jonwagnerdotcom](http://twitter.com/#!jonwagnerdotcom) for latest updat
 
 # Documentation #
 
-**Full documentation is available on the [wiki](https://github.com/jonwagner/BuildTools/wiki)!**
+**Full documentation is available on the [wiki](https://github.com/jonwagner/BuildTools.NET/wiki)!**
 
 # Good References #
 
